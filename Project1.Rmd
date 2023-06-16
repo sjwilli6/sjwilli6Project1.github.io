@@ -1,0 +1,26 @@
+---
+title: "Project 1"
+date: "2023-06-25"
+author: "Spencer Williams"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Packages Needed
+```{r packages, include=TRUE}
+library(httr)
+library(dplyr)
+library(jsonlite)
+```
+
+### Installing Movie Data
+```{r intro, include=TRUE}
+myData <- GET("http://www.omdbapi.com/?i=tt3896198&apikey=b1e5e254")
+str(myData, max.level = 1)
+parsed <- fromJSON(rawToChar(myData$content))
+str(parsed, max.level = 1)
+```
+
