@@ -23,25 +23,26 @@ library(dplyr)
 
 ``` r
 library(jsonlite)
+library(rmarkdown)
 ```
 
 ### Installing Movie Data
 
 ``` r
-myData <- GET("http://www.omdbapi.com/?i=tt3896198&apikey=b1e5e254")
+myData <- GET("https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/2023-01-09?adjusted=true&apiKey=BnFt9sqaLWehzloLkpMtEeOG4WjAqkUc")
 str(myData, max.level = 1)
 ```
 
     ## List of 10
-    ##  $ url        : chr "http://www.omdbapi.com/?i=tt3896198&apikey=b1e5e254"
+    ##  $ url        : chr "https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/2023-01-09?adjusted=true&apiKey=BnFt9sqaLWehzloL"| __truncated__
     ##  $ status_code: int 200
-    ##  $ headers    :List of 15
+    ##  $ headers    :List of 7
     ##   ..- attr(*, "class")= chr [1:2] "insensitive" "list"
     ##  $ all_headers:List of 1
     ##  $ cookies    :'data.frame': 0 obs. of  7 variables:
-    ##  $ content    : raw [1:1064] 7b 22 54 69 ...
-    ##  $ date       : POSIXct[1:1], format: "2023-06-16 01:54:46"
-    ##  $ times      : Named num [1:6] 0 0.0479 0.0776 0.0777 0.1855 ...
+    ##  $ content    : raw [1:1123055] 7b 22 71 75 ...
+    ##  $ date       : POSIXct[1:1], format: "2023-06-18 01:24:37"
+    ##  $ times      : Named num [1:6] 0 0.0013 0.0452 0.1939 0.4222 ...
     ##   ..- attr(*, "names")= chr [1:6] "redirect" "namelookup" "connect" "pretransfer" ...
     ##  $ request    :List of 7
     ##   ..- attr(*, "class")= chr "request"
@@ -53,36 +54,19 @@ parsed <- fromJSON(rawToChar(myData$content))
 str(parsed, max.level = 1)
 ```
 
-    ## List of 25
-    ##  $ Title     : chr "Guardians of the Galaxy Vol. 2"
-    ##  $ Year      : chr "2017"
-    ##  $ Rated     : chr "PG-13"
-    ##  $ Released  : chr "05 May 2017"
-    ##  $ Runtime   : chr "136 min"
-    ##  $ Genre     : chr "Action, Adventure, Comedy"
-    ##  $ Director  : chr "James Gunn"
-    ##  $ Writer    : chr "James Gunn, Dan Abnett, Andy Lanning"
-    ##  $ Actors    : chr "Chris Pratt, Zoe Saldana, Dave Bautista"
-    ##  $ Plot      : chr "The Guardians struggle to keep together as a team while dealing with their personal family issues, notably Star"| __truncated__
-    ##  $ Language  : chr "English"
-    ##  $ Country   : chr "United States"
-    ##  $ Awards    : chr "Nominated for 1 Oscar. 15 wins & 60 nominations total"
-    ##  $ Poster    : chr "https://m.media-amazon.com/images/M/MV5BNjM0NTc0NzItM2FlYS00YzEwLWE0YmUtNTA2ZWIzODc2OTgxXkEyXkFqcGdeQXVyNTgwNzI"| __truncated__
-    ##  $ Ratings   :'data.frame':  3 obs. of  2 variables:
-    ##  $ Metascore : chr "67"
-    ##  $ imdbRating: chr "7.6"
-    ##  $ imdbVotes : chr "712,189"
-    ##  $ imdbID    : chr "tt3896198"
-    ##  $ Type      : chr "movie"
-    ##  $ DVD       : chr "22 Aug 2017"
-    ##  $ BoxOffice : chr "$389,813,101"
-    ##  $ Production: chr "N/A"
-    ##  $ Website   : chr "N/A"
-    ##  $ Response  : chr "True"
+    ## List of 7
+    ##  $ queryCount  : int 10953
+    ##  $ resultsCount: int 10953
+    ##  $ adjusted    : logi TRUE
+    ##  $ results     :'data.frame':    10953 obs. of  9 variables:
+    ##  $ status      : chr "OK"
+    ##  $ request_id  : chr "806f253bde2f8ac15268431f5428f880"
+    ##  $ count       : int 10953
 
 ``` r
-parsed$articles %>%
-colnames()
+parsed$results %>% colnames()
 ```
 
-    ## NULL
+    ## [1] "T"  "v"  "vw" "o"  "c"  "h"  "l"  "t"  "n"
+
+### Making Functions

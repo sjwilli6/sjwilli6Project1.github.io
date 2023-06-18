@@ -14,13 +14,18 @@ knitr::opts_chunk$set(echo = TRUE)
 library(httr)
 library(dplyr)
 library(jsonlite)
+library(rmarkdown)
 ```
 
 ### Installing Movie Data
 ```{r intro, include=TRUE}
-myData <- GET("http://www.omdbapi.com/?i=tt3896198&apikey=b1e5e254")
+myData <- GET("https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/2023-01-09?adjusted=true&apiKey=BnFt9sqaLWehzloLkpMtEeOG4WjAqkUc")
 str(myData, max.level = 1)
 parsed <- fromJSON(rawToChar(myData$content))
 str(parsed, max.level = 1)
+parsed$results %>% colnames()
 ```
+
+### Making Functions
+
 
