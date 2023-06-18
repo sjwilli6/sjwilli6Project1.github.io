@@ -19,6 +19,7 @@ library(rmarkdown)
 
 ### Installing Movie Data
 ```{r intro, include=TRUE}
+library(dplyr)
 myData <- GET("https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/2023-01-09?adjusted=true&apiKey=BnFt9sqaLWehzloLkpMtEeOG4WjAqkUc")
 str(myData, max.level = 1)
 parsed <- fromJSON(rawToChar(myData$content))
@@ -26,6 +27,24 @@ str(parsed, max.level = 1)
 parsed$results %>% colnames()
 ```
 
+### Making A Data Frame
+```{r dataframe, include=TRUE}
+parsedDataFrame <- as.data.frame(parsed)
+colnames(parsedDataFrame) <- c("Query", "Total_Request", "Adjusted", "Symbol", "Volume", "Volume_Weight", "Open", "Close", "High", "Low", "Timestamp", "Transactions")
+print(parsedDataFrame, obs = 5)
+```
+
 ### Making Functions
-
-
+```{r functions1, include=TRUE}
+n1 <- length(parsed$results$t)
+dailyDiff <- function(request_id) {
+  for (i in 1:n1) {
+  if (request_id == parsed$results$T[i]) {
+    return(parsed$results$h[i] - parsed$results$l[i])
+    }
+  else {print("This is not a stock")
+  }
+  }
+}
+dailyDiff("TTMI")
+```
