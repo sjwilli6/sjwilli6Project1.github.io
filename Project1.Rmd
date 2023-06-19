@@ -15,36 +15,53 @@ library(httr)
 library(dplyr)
 library(jsonlite)
 library(rmarkdown)
+library(tidyverse)
 ```
 
-### Installing Movie Data
+### Installing Stock Data from January 9
 ```{r intro, include=TRUE}
 library(dplyr)
 myData <- GET("https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/2023-01-09?adjusted=true&apiKey=BnFt9sqaLWehzloLkpMtEeOG4WjAqkUc")
 str(myData, max.level = 1)
-parsed <- fromJSON(rawToChar(myData$content))
-str(parsed, max.level = 1)
-parsed$results %>% colnames()
+parsedJan <- fromJSON(rawToChar(myData$content))
+str(parsedJan, max.level = 1)
+parsedJan$results %>% colnames()
 ```
 
-### Making A Data Frame
+### Making A Data Frame for January 9th Data
 ```{r dataframe, include=TRUE}
-parsedDataFrame <- as.data.frame(parsed)
-colnames(parsedDataFrame) <- c("Query", "Total_Request", "Adjusted", "Symbol", "Volume", "Volume_Weight", "Open", "Close", "High", "Low", "Timestamp", "Transactions")
-print(parsedDataFrame, obs = 5)
+parsedJanDataFrame <- as.data.frame(parsedJan)
+colnames(parsedJanDataFrame) <- c("Query", "Total_Request", "Adjusted", "Symbol", "Volume", "Volume_Weight", "Open", "Close", "High", "Low", "Timestamp", "Transactions", "Status", "Request_ID", "Count")
 ```
 
-### Making Functions
-```{r functions1, include=TRUE}
-n1 <- length(parsed$results$t)
-dailyDiff <- function(request_id) {
-  for (i in 1:n1) {
-  if (request_id == parsed$results$T[i]) {
-    return(parsed$results$h[i] - parsed$results$l[i])
-    }
-  else {print("This is not a stock")
-  }
-  }
-}
-dailyDiff("TTMI")
+### Installing Stock Data from March 9
+```{r intro2, include=TRUE}
+library(dplyr)
+myData2 <- GET("https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/2023-03-09?adjusted=true&apiKey=BnFt9sqaLWehzloLkpMtEeOG4WjAqkUc")
+str(myData2, max.level = 1)
+parsedMar <- fromJSON(rawToChar(myData2$content))
+str(parsedMar, max.level = 1)
+parsedMar$results %>% colnames()
 ```
+
+### Making A Data Frame for March 9th Data
+```{r dataframe2, include=TRUE}
+parsedMarDataFrame <- as.data.frame(parsedMar)
+colnames(parsedMarDataFrame) <- c("Query", "Total_Request", "Adjusted", "Symbol", "Volume", "Volume_Weight", "Open", "Close", "High", "Low", "Timestamp", "Transactions", "Status", "Request_ID", "Count")
+```
+
+### Combining the Two Data Frames and Adding a Month Variable
+```{r combine, include=FALSE}
+library(tidyr)
+parsedJanDataFrame %>% drop_na()
+parsedJanDataFrame <- mutate(parsedJanDataFrame, Month = "January")
+parsedMarDataFrame %>% drop_na()
+parsedMarDataFrame <- mutate(parsedMarDataFrame, Month = "March")
+parsedFullData <- full_join(parsedJanDataFrame, parsedMarDataFrame)
+```
+
+```{r view_combine, include=TRUE}
+head(parsedFullData)
+```
+
+### Creating Contingency Table
