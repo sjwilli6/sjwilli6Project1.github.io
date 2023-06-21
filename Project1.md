@@ -54,9 +54,9 @@ str(myData, max.level = 1)
     ##   ..- attr(*, "class")= chr [1:2] "insensitive" "list"
     ##  $ all_headers:List of 1
     ##  $ cookies    :'data.frame': 0 obs. of  7 variables:
-    ##  $ content    : raw [1:1123055] 7b 22 71 75 ...
-    ##  $ date       : POSIXct[1:1], format: "2023-06-19 02:15:26"
-    ##  $ times      : Named num [1:6] 0 0.0554 0.1158 0.3787 0.6261 ...
+    ##  $ content    : raw [1:1123052] 7b 22 71 75 ...
+    ##  $ date       : POSIXct[1:1], format: "2023-06-21 00:43:51"
+    ##  $ times      : Named num [1:6] 0 0.00227 0.04133 0.17773 0.46311 ...
     ##   ..- attr(*, "names")= chr [1:6] "redirect" "namelookup" "connect" "pretransfer" ...
     ##  $ request    :List of 7
     ##   ..- attr(*, "class")= chr "request"
@@ -74,7 +74,7 @@ str(parsedJan, max.level = 1)
     ##  $ adjusted    : logi TRUE
     ##  $ results     :'data.frame':    10953 obs. of  9 variables:
     ##  $ status      : chr "OK"
-    ##  $ request_id  : chr "d04c5b0a0a8e057cb2091792ac438f6f"
+    ##  $ request_id  : chr "868f160edd3af514e2ae4e06759d08c0"
     ##  $ count       : int 10953
 
 ``` r
@@ -105,9 +105,9 @@ str(myData2, max.level = 1)
     ##   ..- attr(*, "class")= chr [1:2] "insensitive" "list"
     ##  $ all_headers:List of 1
     ##  $ cookies    :'data.frame': 0 obs. of  7 variables:
-    ##  $ content    : raw [1:1113104] 7b 22 71 75 ...
-    ##  $ date       : POSIXct[1:1], format: "2023-06-19 02:15:27"
-    ##  $ times      : Named num [1:6] 0 0.000036 0.000038 0.000141 0.352196 ...
+    ##  $ content    : raw [1:1113102] 7b 22 71 75 ...
+    ##  $ date       : POSIXct[1:1], format: "2023-06-21 00:43:52"
+    ##  $ times      : Named num [1:6] 0 0.000031 0.000033 0.000095 0.447737 ...
     ##   ..- attr(*, "names")= chr [1:6] "redirect" "namelookup" "connect" "pretransfer" ...
     ##  $ request    :List of 7
     ##   ..- attr(*, "class")= chr "request"
@@ -125,7 +125,7 @@ str(parsedMar, max.level = 1)
     ##  $ adjusted    : logi TRUE
     ##  $ results     :'data.frame':    10844 obs. of  9 variables:
     ##  $ status      : chr "OK"
-    ##  $ request_id  : chr "ac816a03ac5249662777038504a311b8"
+    ##  $ request_id  : chr "f82498e6c7d7fbff1c71b9c6ab8d33cc"
     ##  $ count       : int 10844
 
 ``` r
@@ -141,9 +141,21 @@ parsedMarDataFrame <- as.data.frame(parsedMar)
 colnames(parsedMarDataFrame) <- c("Query", "Total_Request", "Adjusted", "Symbol", "Volume", "Volume_Weight", "Open", "Close", "High", "Low", "Timestamp", "Transactions", "Status", "Request_ID", "Count")
 ```
 
-### Combining the Two Data Frames and Adding a Month Variable
+### Combining the Two Data Frames and Adding a Month, Difference, and Return Variables
 
 ``` r
+Returns <- vector()
+for (i in seq_len(nrow(parsedFullData))) {
+  if(parsedFullData$Difference[i] >= 0) {
+    Returns[i] <- "Positive"
+  } else if (parsedFullData$Difference[i] <= 0) {
+    Returns[i] <- "Negative"
+  } else {
+    Returns[i] <- "Error"
+  }
+}
+parsedFullData$Returns <- Returns
+
 head(parsedFullData)
 ```
 
@@ -155,16 +167,27 @@ head(parsedFullData)
     ## 5 10953         10953     TRUE    WRB 1298028       73.2759 74.29 72.98 74.380
     ## 6 10953         10953     TRUE    WIW  161653        9.4369  9.38  9.48  9.500
     ##       Low    Timestamp Transactions Status                       Request_ID
-    ## 1 15.9600 1.673298e+12         5416     OK d04c5b0a0a8e057cb2091792ac438f6f
-    ## 2 18.4500 1.673298e+12         8130     OK d04c5b0a0a8e057cb2091792ac438f6f
-    ## 3 25.8204 1.673298e+12         2417     OK d04c5b0a0a8e057cb2091792ac438f6f
-    ## 4 57.0250 1.673298e+12         7325     OK d04c5b0a0a8e057cb2091792ac438f6f
-    ## 5 72.5900 1.673298e+12        15947     OK d04c5b0a0a8e057cb2091792ac438f6f
-    ## 6  9.3500 1.673298e+12          983     OK d04c5b0a0a8e057cb2091792ac438f6f
-    ##   Count   Month
-    ## 1 10953 January
-    ## 2 10953 January
-    ## 3 10953 January
-    ## 4 10953 January
-    ## 5 10953 January
-    ## 6 10953 January
+    ## 1 15.9600 1.673298e+12         5416     OK 868f160edd3af514e2ae4e06759d08c0
+    ## 2 18.4500 1.673298e+12         8130     OK 868f160edd3af514e2ae4e06759d08c0
+    ## 3 25.8204 1.673298e+12         2417     OK 868f160edd3af514e2ae4e06759d08c0
+    ## 4 57.0250 1.673298e+12         7325     OK 868f160edd3af514e2ae4e06759d08c0
+    ## 5 72.5900 1.673298e+12        15947     OK 868f160edd3af514e2ae4e06759d08c0
+    ## 6  9.3500 1.673298e+12          983     OK 868f160edd3af514e2ae4e06759d08c0
+    ##   Count   Month Difference  Returns
+    ## 1 10953 January      -0.12 Negative
+    ## 2 10953 January      -0.31 Negative
+    ## 3 10953 January       0.04 Positive
+    ## 4 10953 January       0.87 Positive
+    ## 5 10953 January       1.31 Positive
+    ## 6 10953 January      -0.10 Negative
+
+### Creating a Contingency Table
+
+``` r
+table(parsedFullData$Returns, parsedFullData$Month)
+```
+
+    ##           
+    ##            January March
+    ##   Negative    4285  1560
+    ##   Positive    6668  9284

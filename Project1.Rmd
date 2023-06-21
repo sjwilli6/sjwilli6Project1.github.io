@@ -50,18 +50,33 @@ parsedMarDataFrame <- as.data.frame(parsedMar)
 colnames(parsedMarDataFrame) <- c("Query", "Total_Request", "Adjusted", "Symbol", "Volume", "Volume_Weight", "Open", "Close", "High", "Low", "Timestamp", "Transactions", "Status", "Request_ID", "Count")
 ```
 
-### Combining the Two Data Frames and Adding a Month Variable
+### Combining the Two Data Frames and Adding a Month, Difference, and Return Variables
 ```{r combine, include=FALSE}
 library(tidyr)
 parsedJanDataFrame %>% drop_na()
-parsedJanDataFrame <- mutate(parsedJanDataFrame, Month = "January")
+parsedJanDataFrame <- mutate(parsedJanDataFrame, Month = "January", Difference = (Open - Close))
 parsedMarDataFrame %>% drop_na()
-parsedMarDataFrame <- mutate(parsedMarDataFrame, Month = "March")
+parsedMarDataFrame <- mutate(parsedMarDataFrame, Month = "March", Difference = (Open - Close))
 parsedFullData <- full_join(parsedJanDataFrame, parsedMarDataFrame)
 ```
 
-```{r view_combine, include=TRUE}
+```{r return, include=TRUE}
+Returns <- vector()
+for (i in seq_len(nrow(parsedFullData))) {
+  if(parsedFullData$Difference[i] >= 0) {
+    Returns[i] <- "Positive"
+  } else if (parsedFullData$Difference[i] <= 0) {
+    Returns[i] <- "Negative"
+  } else {
+    Returns[i] <- "Error"
+  }
+}
+parsedFullData$Returns <- Returns
+
 head(parsedFullData)
 ```
 
-### Creating Contingency Table
+### Creating a Contingency Table
+```{r contingency, include=TRUE}
+table(parsedFullData$Returns, parsedFullData$Month)
+```
