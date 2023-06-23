@@ -55,8 +55,8 @@ str(myData, max.level = 1)
     ##  $ all_headers:List of 1
     ##  $ cookies    :'data.frame': 0 obs. of  7 variables:
     ##  $ content    : raw [1:1123054] 7b 22 71 75 ...
-    ##  $ date       : POSIXct[1:1], format: "2023-06-23 02:35:20"
-    ##  $ times      : Named num [1:6] 0 0.0169 0.042 0.1495 0.4654 ...
+    ##  $ date       : POSIXct[1:1], format: "2023-06-23 03:19:16"
+    ##  $ times      : Named num [1:6] 0 0.0176 0.044 0.162 0.3975 ...
     ##   ..- attr(*, "names")= chr [1:6] "redirect" "namelookup" "connect" "pretransfer" ...
     ##  $ request    :List of 7
     ##   ..- attr(*, "class")= chr "request"
@@ -74,7 +74,7 @@ str(parsedJan, max.level = 1)
     ##  $ adjusted    : logi TRUE
     ##  $ results     :'data.frame':    10953 obs. of  9 variables:
     ##  $ status      : chr "OK"
-    ##  $ request_id  : chr "c08bef0482d5c15c3c803852675e4d4e"
+    ##  $ request_id  : chr "526ad94413d874f865baed29f7da4f65"
     ##  $ count       : int 10953
 
 ``` r
@@ -112,8 +112,8 @@ str(myData2, max.level = 1)
     ##  $ all_headers:List of 1
     ##  $ cookies    :'data.frame': 0 obs. of  7 variables:
     ##  $ content    : raw [1:1113109] 7b 22 71 75 ...
-    ##  $ date       : POSIXct[1:1], format: "2023-06-23 02:35:21"
-    ##  $ times      : Named num [1:6] 0 0.000032 0.000034 0.000109 0.515095 ...
+    ##  $ date       : POSIXct[1:1], format: "2023-06-23 03:19:17"
+    ##  $ times      : Named num [1:6] 0 0.000029 0.000031 0.000098 0.631606 ...
     ##   ..- attr(*, "names")= chr [1:6] "redirect" "namelookup" "connect" "pretransfer" ...
     ##  $ request    :List of 7
     ##   ..- attr(*, "class")= chr "request"
@@ -131,7 +131,7 @@ str(parsedMar, max.level = 1)
     ##  $ adjusted    : logi TRUE
     ##  $ results     :'data.frame':    10844 obs. of  9 variables:
     ##  $ status      : chr "OK"
-    ##  $ request_id  : chr "e340b797e649239b2f78018f3e963283"
+    ##  $ request_id  : chr "96b660fe29b8fb3e2d9324e8ab3e8c3d"
     ##  $ count       : int 10844
 
 ``` r
@@ -185,12 +185,12 @@ head(parsedFullData)
     ## 5 10953         10953     TRUE    WRB 1298028       73.2759 74.29 72.98 74.380
     ## 6 10953         10953     TRUE    WIW  161653        9.4369  9.38  9.48  9.500
     ##       Low    Timestamp Transactions Status                       Request_ID
-    ## 1 15.9600 1.673298e+12         5416     OK c08bef0482d5c15c3c803852675e4d4e
-    ## 2 18.4500 1.673298e+12         8130     OK c08bef0482d5c15c3c803852675e4d4e
-    ## 3 25.8204 1.673298e+12         2417     OK c08bef0482d5c15c3c803852675e4d4e
-    ## 4 57.0250 1.673298e+12         7325     OK c08bef0482d5c15c3c803852675e4d4e
-    ## 5 72.5900 1.673298e+12        15947     OK c08bef0482d5c15c3c803852675e4d4e
-    ## 6  9.3500 1.673298e+12          983     OK c08bef0482d5c15c3c803852675e4d4e
+    ## 1 15.9600 1.673298e+12         5416     OK 526ad94413d874f865baed29f7da4f65
+    ## 2 18.4500 1.673298e+12         8130     OK 526ad94413d874f865baed29f7da4f65
+    ## 3 25.8204 1.673298e+12         2417     OK 526ad94413d874f865baed29f7da4f65
+    ## 4 57.0250 1.673298e+12         7325     OK 526ad94413d874f865baed29f7da4f65
+    ## 5 72.5900 1.673298e+12        15947     OK 526ad94413d874f865baed29f7da4f65
+    ## 6  9.3500 1.673298e+12          983     OK 526ad94413d874f865baed29f7da4f65
     ##   Count   Month Difference  Returns
     ## 1 10953 January      -0.12 Negative
     ## 2 10953 January      -0.31 Negative
@@ -246,3 +246,29 @@ stock to the month variable, a \$20.00 stock seems to be around the
 median. In January, 5315 stocks were above an opening price of \$20.00
 while 5638 stocks were below this price. In March, these totals were
 5417 above and 5427 below the opening price of \$20.00.
+
+### Creating Numerical Summaries Grouped by Month
+
+``` r
+tapply(parsedFullData$Low, parsedFullData$Month, summary)
+```
+
+    ## $January
+    ##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+    ##      0.0      6.8     19.0     78.8     34.9 476653.3 
+    ## 
+    ## $March
+    ##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+    ##      0.0      6.5     19.5     78.6     35.6 460924.4
+
+``` r
+tapply(parsedFullData$High, parsedFullData$Month, summary)
+```
+
+    ## $January
+    ##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+    ##      0.0      7.1     19.4     80.7     35.7 487989.1 
+    ## 
+    ## $March
+    ##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+    ##      0.0      7.0     20.1     81.0     36.7 474833.9

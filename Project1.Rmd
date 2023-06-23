@@ -113,3 +113,14 @@ table(parsedFullData$Twenty, parsedFullData$Month)
 ```
 
 Based on this contingency table comparing the opening price of each stock to the month variable, a $20.00 stock seems to be around the median. In January, 5315 stocks were above an opening price of $20.00 while 5638 stocks were below this price. In March, these totals were 5417 above and 5427 below the opening price of $20.00.
+
+### Creating Numerical Summaries Grouped by Month
+```{r summary, include=TRUE}
+tapply(parsedFullData$Low, parsedFullData$Month, summary)
+tapply(parsedFullData$High, parsedFullData$Month, summary)
+```
+
+Here, I am comparing numerical summaries between months for the daily high and lows. Based on the mean and median of each month, the data seems to be heavily skewed to the right (higher stock price). The summary statistics are relatively similar for the two months at daily low and high prices.
+
+
+
